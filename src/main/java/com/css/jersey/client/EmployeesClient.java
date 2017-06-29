@@ -2,16 +2,11 @@ package com.css.jersey.client;
 
 import java.util.List;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.filter.LoggingFilter;
 
 import com.css.jersey.model.Employee;
 import com.css.jersey.model.Employees;
@@ -27,6 +22,8 @@ public class EmployeesClient {
     public static void main(String[] args) {
         getAllEmployees();
         getEmployee();
+        addEmployee();
+        updateEmployee();
     }
 
     private static void getAllEmployees() {
@@ -51,6 +48,28 @@ public class EmployeesClient {
         System.out.println(employee);
         System.out.printf("************************");
 
+    }
+
+    private static void addEmployee() {
+        Employee emp = new Employee(10, "Dravid");
+        Invocation.Builder builder = getInvocationBuilder("");
+        Response response = builder.post(Entity.entity(emp, MediaType.APPLICATION_XML_TYPE));
+        System.out.println("************************");
+        System.out.println("ADD EMPLOYEE :: " + response.getStatus());
+        System.out.println(response.readEntity(String.class));
+        System.out.printf("************************");
+    }
+
+    private static void updateEmployee() {
+        Employee emp = new Employee();
+        emp.setName("Ganguly");
+        Invocation.Builder builder = getInvocationBuilder("/15");
+        Response response = builder.put(Entity.entity(emp, MediaType.APPLICATION_XML_TYPE));
+
+        System.out.println("************************");
+        System.out.println("UPDATE EMPLOYEE :: " + response.getStatus());
+        System.out.println(response.readEntity(Employee.class));
+        System.out.printf("************************");
     }
 
     private static Invocation.Builder getInvocationBuilder(String path) {
