@@ -1,5 +1,10 @@
 package com.css.jersey.client;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Properties;
+
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -28,11 +33,13 @@ public class EmployeesClientTest {
     private static WebTarget target;
     private static String defaultMediaType;
     private static Client client;
+    private static final String API_PROPERTIES_FILE = "api.properties";
 
     @BeforeClass
-    public static void setup() {
+    public static void setup() throws Exception {
+        String apiEndPoint = getApiEndPoint();
         client = ClientBuilder.newClient();
-        target = client.target("http://localhost:8080/JerseyRestExamples/rest/employees");
+        target = client.target(apiEndPoint);
 
         defaultMediaType = MediaType.APPLICATION_XML;
     }
@@ -102,6 +109,27 @@ public class EmployeesClientTest {
 
         assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
         assertTrue(response.readEntity(String.class).contains("1"));
+    }
+
+    private static String getApiEndPoint() throws IOException {
+        Properties properties = readApiProperties();
+        String protocol = properties.getProperty("protocol");
+        String host = properties.getProperty("host");
+        int port = Integer.parseInt(properties.getProperty("port"));
+        String apiPath = properties.getProperty("apiPath");
+
+        return new URL(protocol, host, port, apiPath).toString();
+    }
+
+    private static Properties readApiProperties() throws IOException {
+        URL resource = EmployeesClientTest.class.getClassLoader().getResource(API_PROPERTIES_FILE);
+        Properties properties = new Properties();
+        if (resource != null) {
+            try(InputStream resourceStream = resource.openStream()) {
+                properties.load(resourceStream);
+            }
+        }
+        return properties;
     }
 }
 
