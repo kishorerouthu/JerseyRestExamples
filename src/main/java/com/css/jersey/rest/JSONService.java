@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.css.jersey.Track;
+import com.css.jersey.model.Track;
 
 
 @Path("/json/metallica")

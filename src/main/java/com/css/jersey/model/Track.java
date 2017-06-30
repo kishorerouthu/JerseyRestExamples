@@ -1,4 +1,4 @@
-package com.css.jersey;
+package com.css.jersey.model;
 
 public class Track {
 
