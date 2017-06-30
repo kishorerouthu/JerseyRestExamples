@@ -72,4 +72,11 @@ public class EmployeeServices {
 
         return Response.ok().entity(updatedEmployee).build();
     }
+
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_XML)
+    public Response deleteEmployee(@PathParam("id") int id) {
+        return Response.ok().entity("Employee deleted successfully ...! with " + id).build();
+    }
 }

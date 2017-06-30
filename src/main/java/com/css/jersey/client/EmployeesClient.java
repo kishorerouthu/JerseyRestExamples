@@ -24,6 +24,7 @@ public class EmployeesClient {
         getEmployee();
         addEmployee();
         updateEmployee();
+        deleteEmployee();
     }
 
     private static void getAllEmployees() {
@@ -72,6 +73,16 @@ public class EmployeesClient {
         System.out.printf("************************");
     }
 
+    private static void deleteEmployee() {
+        Invocation.Builder builder = getInvocationBuilder("/1");
+        Response response = builder.delete();
+        System.out.println("************************");
+        System.out.println("UPDATE EMPLOYEE :: " + response.getStatus());
+        System.out.println(response.readEntity(String.class));
+        System.out.printf("************************");
+    }
+
+
     private static Invocation.Builder getInvocationBuilder(String path) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(API_BASE_URL);
@@ -79,6 +90,8 @@ public class EmployeesClient {
             target = target.path(path);
         return target.request(MediaType.APPLICATION_XML);
     }
+
+
 
 }
 
